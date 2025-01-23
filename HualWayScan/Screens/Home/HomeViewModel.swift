@@ -65,7 +65,8 @@ class HomeViewModel: ObservableObject {
                     if response?.subStatus == SubStatusType.repair.rawValue {
                         self?.isShowRepairCompleted.toggle()
                         return
-                    } else if response?.subStatus == SubStatusType.testing.rawValue {
+                    }
+                    if response?.subStatus == SubStatusType.testing.rawValue {
                         self?.isShowTesting.toggle()
                         return
                     }
@@ -220,7 +221,8 @@ class HomeViewModel: ObservableObject {
                     if response?.subStatus == SubStatusType.repair.rawValue {
                         self?.isShowRepairCompleted.toggle()
                         return
-                    } else if response?.subStatus == SubStatusType.testing.rawValue {
+                    }
+                    if response?.subStatus == SubStatusType.testing.rawValue {
                         self?.isShowTesting.toggle()
                         return
                     }

@@ -69,12 +69,12 @@ struct HomeView: View {
         } message: {
             Text("Testing successful?")
         }
-        .alert("Confirm", isPresented: $viewModel.isShowTesting) {
+        .alert("Confirm", isPresented: $viewModel.isShowRepairRequired) {
             Button("YES", action: {
-                viewModel.confirmRepairCompleted(isCompleted: true)
+                viewModel.confirmRepairRequired(isRequired: true)
             })
             Button("NO", action: {
-                viewModel.confirmRepairCompleted(isCompleted: false)
+                viewModel.confirmRepairRequired(isRequired: false)
             })
             Button("BACK", action: {
                 presentationMode.wrappedValue.dismiss()

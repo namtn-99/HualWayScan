@@ -13,6 +13,7 @@ struct ContentView: View {
     
     @State private var isShowHome = false
     @State private var barCode = ""
+    @State private var isShowContinueUpdate = AppSettings.barcode.isEmpty
     
     var body: some View {
         NavigationStack {
@@ -52,7 +53,13 @@ struct ContentView: View {
         } message: {
            
         }
-        .errorAlert(isPresented: $viewModel.isError, errorMessage: viewModel.errorStr ?? "", primaryButtonTap: {
+        .showAlert(isPresented: $isShowContinueUpdate, errorMessage: "Do you want to continue updating?", primaryTitle: "Continue", secondaryTitle: "Cancel", primaryButtonTap: {
+            barCode = AppSettings.barcode
+            isShowHome.toggle()
+        }, secondaryButtonTap: {
+            AppSettings.barcode = ""
+        })
+        .showAlert(isPresented: $viewModel.isError, errorMessage: viewModel.errorStr ?? "", primaryTitle: "Update", secondaryTitle: "Cancel", primaryButtonTap: {
             viewModel.getAppliance(code: barCode)
         }, secondaryButtonTap: {
             NotificationCenter.default.post(name: NSNotification.rescan, object: nil, userInfo: nil)

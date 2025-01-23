@@ -18,7 +18,7 @@ extension View {
         }
     }
     
-    func errorAlert(isPresented: Binding<Bool>, errorMessage: String, primaryButtonTap: @escaping () -> Void, secondaryButtonTap: @escaping () -> Void) -> some View {
+    func showAlert(isPresented: Binding<Bool>, errorMessage: String, primaryTitle: String, secondaryTitle: String, primaryButtonTap: @escaping () -> Void, secondaryButtonTap: @escaping () -> Void) -> some View {
         self.alert(isPresented: isPresented) {
             Alert(
                 title: Text(""),

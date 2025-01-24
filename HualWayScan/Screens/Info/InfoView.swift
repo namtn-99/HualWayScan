@@ -42,7 +42,7 @@ struct InfoView: View {
             
             if viewModel.isShowSuccess {
                 GeometryReader { _ in
-                    SuccessPopupView(onTap: {
+                    SuccessPopupView(message: "Your settings have been saved!", onTap: {
                         isShow.toggle()
                     })
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

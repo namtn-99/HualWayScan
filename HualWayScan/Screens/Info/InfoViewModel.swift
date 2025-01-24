@@ -17,7 +17,7 @@ class InfoViewModel: ObservableObject {
     
     @Published var selectedCategory: CategoryType = .cooking
     @Published var selectedStatus: StatusType = .accepted
-    @Published var selectedSubStatus: SubStatusType? = .condition
+    @Published var selectedSubStatus: SubStatusType = .condition
     @Published var parts = ""
     @Published var po = ""
     @Published var description = ""
@@ -33,7 +33,7 @@ class InfoViewModel: ObservableObject {
             "barcode": barcode,
             "category": selectedCategory.rawValue,
             "status": selectedStatus.rawValue,
-            "sub_status": selectedSubStatus?.rawValue ?? "",
+            "sub_status": selectedSubStatus.rawValue,
             "parts": parts,
             "po": po,
             "description": description,

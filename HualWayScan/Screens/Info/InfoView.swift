@@ -65,11 +65,15 @@ struct InfoView: View {
             viewModel.parts = model?.repairParts ?? ""
             viewModel.po = model?.repairPo ?? ""
             viewModel.description = model?.repairDescription ?? ""
-            viewModel.cost = String(describing: model?.repairCost ?? 0)
+            
             viewModel.repairRequired = model?.repairRequired ?? false
             viewModel.cleanRequired = model?.cleaningRequired ?? false
             viewModel.recycle = model?.recycle ?? false
             viewModel.scrap = model?.scrap ?? false
+            
+            if let cost = model?.repairCost {
+                viewModel.cost = String(describing: cost)
+            }
         }
     }
 }
@@ -125,7 +129,12 @@ extension InfoView {
             .tint(.white)
             .pickerStyle(.menu)
             .onChange(of: viewModel.selectedStatus) { newValue in
-                viewModel.selectedSubStatus = nil
+                if newValue == .rejected {
+                    viewModel.selectedSubStatus = .expensive
+                } else {
+                    viewModel.selectedSubStatus = .testing
+                }
+              
             }
         }
         .frame(height: heightForView)

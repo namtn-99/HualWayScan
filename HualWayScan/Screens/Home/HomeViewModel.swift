@@ -126,10 +126,8 @@ class HomeViewModel: ObservableObject {
         case .rejected:
             if applianceModel?.category == CategoryType.refrigerant.rawValue {
                 self.params["recycle"] = true
-            } else {
-                self.params["scrap"] = true
             }
-            patchAppliance()
+            patchAppliance(isNeedBack: true)
         case .accepted:
             if selectedSubStatus == .repair {
                 params["repair_required"] = true
@@ -140,7 +138,7 @@ class HomeViewModel: ObservableObject {
             }
             if selectedSubStatus == .testing {
                 params["sub_status"] = selectedSubStatus?.rawValue ?? ""
-                patchAppliance()
+                patchAppliance(isNeedBack: true)
             }
         case nil:
             break
@@ -153,7 +151,7 @@ class HomeViewModel: ObservableObject {
         self.params["repair_po"] = params["repair_po"]
         self.params["repair_description"] = params["repair_description"]
         self.params["repair_cost"] = params["repair_cost"]
-        patchAppliance()
+        patchAppliance(isNeedBack: true)
     }
     
     func confirmRepairCompleted(isCompleted: Bool) {
@@ -207,7 +205,7 @@ class HomeViewModel: ObservableObject {
     func updateRequireCleaning(isRequire: Bool) {
         self.params["barcode"] = barCode
         self.params["cleaning_required"] = isRequire
-        patchAppliance()
+        patchAppliance(isNeedBack: true)
     }
     
     func updateCleaningCompleted(_ isCompleted: Bool) {
@@ -220,10 +218,15 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    func patchAppliance() {
+    func patchAppliance(isNeedBack: Bool = false) {
         reposiroty.patchApplication(params)
             .subscribe(onSuccess: { [weak self] response in
                 self?.applianceModel = response
+                
+                if isNeedBack {
+                    self?.isShowSuccessPopup = true
+                    return
+                }
                 if self?.applianceModel?.category.isEmpty ?? true {
                     self?.screenType = .category
                     return

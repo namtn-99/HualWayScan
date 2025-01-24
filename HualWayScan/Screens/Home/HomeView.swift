@@ -78,6 +78,19 @@ struct HomeView: View {
         } message : {
             Text("Cleaning completed?")
         }
+        .alert("Confirm", isPresented: $viewModel.isShowCleaning) {
+            Button("YES", action: {
+                viewModel.updateRequireCleaning(isRequire: true)
+            })
+            Button("NO", action: {
+                viewModel.updateRequireCleaning(isRequire: false)
+            })
+            Button("BACK", action: {
+                presentationMode.wrappedValue.dismiss()
+            })
+        } message : {
+            Text("Require Cleaning?")
+        }
         .alert("Confirm", isPresented: $viewModel.isShowRepairCompleted) {
             Button("YES", action: {
                 viewModel.confirmRepairCompleted(isCompleted: true)
@@ -90,19 +103,6 @@ struct HomeView: View {
             })
         } message: {
             Text("Repair completed?")
-        }
-        .alert("Confirm", isPresented: $viewModel.isShowCleaning) {
-            Button("YES", action: {
-                viewModel.updateCleaningCompleted(true)
-            })
-            Button("NO", action: {
-                viewModel.updateCleaningCompleted(false)
-            })
-            Button("BACK", action: {
-                presentationMode.wrappedValue.dismiss()
-            })
-        } message : {
-            Text("Require Cleaning?")
         }
         .alert("Confirm", isPresented: $viewModel.isShowTesting) {
             Button("YES", action: {

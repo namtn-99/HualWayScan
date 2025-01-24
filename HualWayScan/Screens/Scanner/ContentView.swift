@@ -13,7 +13,7 @@ struct ContentView: View {
     
     @State private var isShowHome = false
     @State private var barCode = ""
-    @State private var isShowContinueUpdate = AppSettings.barcode.isEmpty
+    @State private var isShowContinueUpdate = !AppSettings.barcode.isEmpty
     
     var body: some View {
         NavigationStack {
@@ -37,33 +37,47 @@ struct ContentView: View {
                     }
                 }
                 .padding(.bottom, 42)
+                
+                if viewModel.isSuccess {
+                    GeometryReader { _ in
+                        SuccessPopupView(message: "Added!", onTap: {
+                            viewModel.isSuccess.toggle()
+                            NotificationCenter.default.post(name: NSNotification.rescan, object: nil, userInfo: nil)
+                        })
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .padding(.horizontal, 16)
+                    }
+                    .background(
+                        Color.black.opacity(0.65)
+                            .edgesIgnoringSafeArea(.all)
+                            
+                    )
+                }
             }
             .navigationDestination(isPresented: $viewModel.isShowUpdateView) {
                 HomeView(isShow: $viewModel.isShowUpdateView, barCode: barCode)
             }
             .navigationDestination(isPresented: $viewModel.isShowInfoView) {
-                InfoView(isShow: $viewModel.isShowInfoView)
+                InfoView(isShow: $viewModel.isShowInfoView, model: $viewModel.applianceModel)
             }
         }
-        .alert("Added!", isPresented: $viewModel.isSuccess) {
-            Button("OK", action: {
-                viewModel.isSuccess.toggle()
-                NotificationCenter.default.post(name: NSNotification.rescan, object: nil, userInfo: nil)
-            })
-        } message: {
-           
+//        .showAlert(isPresented: $isShowContinueUpdate, errorMessage: "Do you want to continue updating?", primaryTitle: "Continue", secondaryTitle: "Cancel", primaryButtonTap: {
+//            barCode = AppSettings.barcode
+//            isShowHome.toggle()
+//        }, secondaryButtonTap: {
+//            AppSettings.barcode = ""
+//        })
+        .onChange(of: viewModel.isError) { newValue in
+            if newValue {
+                viewModel.isError = false
+                viewModel.getAppliance(code: barCode)
+            }
         }
-        .showAlert(isPresented: $isShowContinueUpdate, errorMessage: "Do you want to continue updating?", primaryTitle: "Continue", secondaryTitle: "Cancel", primaryButtonTap: {
-            barCode = AppSettings.barcode
-            isShowHome.toggle()
-        }, secondaryButtonTap: {
-            AppSettings.barcode = ""
-        })
-        .showAlert(isPresented: $viewModel.isError, errorMessage: viewModel.errorStr ?? "", primaryTitle: "Update", secondaryTitle: "Cancel", primaryButtonTap: {
-            viewModel.getAppliance(code: barCode)
-        }, secondaryButtonTap: {
-            NotificationCenter.default.post(name: NSNotification.rescan, object: nil, userInfo: nil)
-        })
+//        .showAlert(isPresented: $viewModel.isError, errorMessage: viewModel.errorStr ?? "", primaryTitle: "Update", secondaryTitle: "Cancel", primaryButtonTap: {
+//            viewModel.getAppliance(code: barCode)
+//        }, secondaryButtonTap: {
+//            NotificationCenter.default.post(name: NSNotification.rescan, object: nil, userInfo: nil)
+//        })
         .ignoresSafeArea(.all)
     }
 }

@@ -15,22 +15,39 @@ struct HomeView: View {
     let barCode: String
     
     var body: some View {
-        VStack {
-            switch viewModel.screenType {
-            case .category:
-                updateCategoryView
-            case .status:
-                updateStatusView
-            case .none:
-                EmptyView()
+        ZStack {
+            VStack {
+                switch viewModel.screenType {
+                case .category:
+                    updateCategoryView
+                case .status:
+                    updateStatusView
+                case .none:
+                    EmptyView()
+                }
+                Spacer()
+                updateButton
             }
-            Spacer()
-            updateButton
+            
+            if viewModel.isShowSuccessPopup {
+                GeometryReader { _ in
+                    SuccessPopupView(message: "Your settings have been saved!", onTap: {
+                        presentationMode.wrappedValue.dismiss()
+                    })
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .padding(.horizontal, 16)
+                }
+                .background(
+                    Color.black.opacity(0.65)
+                        .edgesIgnoringSafeArea(.all)
+                        
+                )
+            }
         }
         .navigationTitle("Update")
         .errorAlert(isPresented: $viewModel.isError, errorMessage: viewModel.errorStr ?? "")
         .navigationDestination(isPresented: $viewModel.isShowInfo, destination: {
-            InfoView(isShow: $isShow)
+            InfoView(isShow: $isShow, model: $viewModel.applianceModel)
         })
         .sheet(isPresented: $viewModel.isShowRepairInput, content: {
             InputRepairView() { params in
@@ -42,6 +59,11 @@ struct HomeView: View {
             viewModel.updateRequireCleaning(isRequire: true)
         }, secondaryButtonTap: {
             viewModel.updateRequireCleaning(isRequire: false)
+        })
+        .defaultAlert(isPresented: $viewModel.isShowCleaningCompleted, title: "Cleaning completed?", message: "", primaryTitle: "Yes", secondaryTile: "No", primaryButtonTap: {
+            viewModel.updateCleaningCompleted(true)
+        }, secondaryButtonTap: {
+            viewModel.updateCleaningCompleted(false)
         })
         .alert("Confirm", isPresented: $viewModel.isShowRepairCompleted) {
             Button("YES", action: {

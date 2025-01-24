@@ -39,10 +39,12 @@ class HomeViewModel: ObservableObject {
     @Published var barCode = ""
     @Published var isShowRepairInput = false
     @Published var isShowCleaning = false
+    @Published var isShowCleaningCompleted = false
     @Published var isShowRepairCompleted = false
     @Published var isShowTesting = false
     @Published var isShowRepairRequired = false
     @Published var isShowInfo = false
+    @Published var isShowSuccessPopup = false
     
     var params: [String: Any] = [:]
     
@@ -70,6 +72,11 @@ class HomeViewModel: ObservableObject {
                         self?.isShowTesting.toggle()
                         return
                     }
+                }
+                
+                if response?.cleaningRequired == true {
+                    self?.isShowCleaningCompleted.toggle()
+                    return
                 }
                 
                 self?.isShowInfo = true
@@ -203,6 +210,16 @@ class HomeViewModel: ObservableObject {
         patchAppliance()
     }
     
+    func updateCleaningCompleted(_ isCompleted: Bool) {
+        if isCompleted {
+            params["barcode"] = barCode
+            params["cleaning_required"] = false
+            patchAppliance()
+        } else {
+            isShowInfo.toggle()
+        }
+    }
+    
     func patchAppliance() {
         reposiroty.patchApplication(params)
             .subscribe(onSuccess: { [weak self] response in
@@ -228,7 +245,12 @@ class HomeViewModel: ObservableObject {
                     }
                 }
                 
-                self?.isShowInfo.toggle()
+                if response?.cleaningRequired == true {
+                    self?.isShowCleaningCompleted.toggle()
+                    return
+                }
+                
+                self?.isShowSuccessPopup = true
             }, onFailure: { [weak self] error in
                 self?.isError = true
                 if let error = error as? APIErrorResponse {

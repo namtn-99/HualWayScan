@@ -55,16 +55,29 @@ struct HomeView: View {
                 viewModel.updateRepair(params: params)
             }
         })
-        .defaultAlert(isPresented: $viewModel.isShowCleaning, title: "Require Cleaning?", message: "", primaryTitle: "Yes", secondaryTile: "No", primaryButtonTap: {
-            viewModel.updateRequireCleaning(isRequire: true)
-        }, secondaryButtonTap: {
-            viewModel.updateRequireCleaning(isRequire: false)
-        })
-        .defaultAlert(isPresented: $viewModel.isShowCleaningCompleted, title: "Cleaning completed?", message: "", primaryTitle: "Yes", secondaryTile: "No", primaryButtonTap: {
-            viewModel.updateCleaningCompleted(true)
-        }, secondaryButtonTap: {
-            viewModel.updateCleaningCompleted(false)
-        })
+//        .defaultAlert(isPresented: $viewModel.isShowCleaning, title: "Require Cleaning?", message: "", primaryTitle: "Yes", secondaryTile: "No", primaryButtonTap: {
+//            viewModel.updateRequireCleaning(isRequire: true)
+//        }, secondaryButtonTap: {
+//            viewModel.updateRequireCleaning(isRequire: false)
+//        })
+//        .defaultAlert(isPresented: $viewModel.isShowCleaningCompleted, title: "Cleaning completed?", message: "", primaryTitle: "Yes", secondaryTile: "No", primaryButtonTap: {
+//            viewModel.updateCleaningCompleted(true)
+//        }, secondaryButtonTap: {
+//            viewModel.updateCleaningCompleted(false)
+//        })
+        .alert("Confirm", isPresented: $viewModel.isShowCleaningCompleted) {
+            Button("YES", action: {
+                viewModel.updateCleaningCompleted(true)
+            })
+            Button("NO", action: {
+                viewModel.updateCleaningCompleted(false)
+            })
+            Button("BACK", action: {
+                presentationMode.wrappedValue.dismiss()
+            })
+        } message : {
+            Text("Cleaning completed?")
+        }
         .alert("Confirm", isPresented: $viewModel.isShowRepairCompleted) {
             Button("YES", action: {
                 viewModel.confirmRepairCompleted(isCompleted: true)
@@ -77,6 +90,19 @@ struct HomeView: View {
             })
         } message: {
             Text("Repair completed?")
+        }
+        .alert("Confirm", isPresented: $viewModel.isShowCleaning) {
+            Button("YES", action: {
+                viewModel.updateCleaningCompleted(true)
+            })
+            Button("NO", action: {
+                viewModel.updateCleaningCompleted(false)
+            })
+            Button("BACK", action: {
+                presentationMode.wrappedValue.dismiss()
+            })
+        } message : {
+            Text("Require Cleaning?")
         }
         .alert("Confirm", isPresented: $viewModel.isShowTesting) {
             Button("YES", action: {

@@ -181,9 +181,9 @@ class HomeViewModel: ObservableObject {
         
         if isSuccess {
             params["sub_status"] = SubStatusType.working.rawValue
-            isShowCleaning.toggle()
+            isShowCleaning = true
         } else {
-            isShowRepairRequired.toggle()
+            isShowRepairRequired = true
         }
     }
     

@@ -42,9 +42,3 @@ struct SuccessPopupView: View {
         .cornerRadius(12)
     }
 }
-
-#Preview {
-    SuccessPopupView() {
-        
-    }
-}

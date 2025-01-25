@@ -144,7 +144,16 @@ extension CodeScannerView {
         }
         
         @objc func rescan() {
+            guard let captureSession else {
+                return
+            }
+            
             reset()
+            if !captureSession.isRunning {
+                DispatchQueue.global(qos: .userInteractive).async {
+                    self.captureSession?.startRunning()
+                }
+            }
         }
 
         override public func viewWillLayoutSubviews() {

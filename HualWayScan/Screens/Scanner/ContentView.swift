@@ -55,7 +55,7 @@ struct ContentView: View {
                 }
             }
             .navigationDestination(isPresented: $viewModel.isShowUpdateView) {
-                HomeView(isShow: $viewModel.isShowUpdateView, barCode: barCode)
+                HomeView(isShow: $viewModel.isShowUpdateView, model: $viewModel.applianceModel, barCode: barCode)
             }
             .navigationDestination(isPresented: $viewModel.isShowInfoView) {
                 InfoView(isShow: $viewModel.isShowInfoView, model: $viewModel.applianceModel)

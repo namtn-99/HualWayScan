@@ -49,46 +49,33 @@ class HomeViewModel: ObservableObject {
     var params: [String: Any] = [:]
     
     func getAppliance(code: String) {
-        let params = ["appliance_id" : code]
-        reposiroty.getApplication(params)
-            .subscribe(onSuccess: { [weak self] response in
-                self?.applianceModel = response
-                if self?.applianceModel?.category.isEmpty ?? true {
-                    self?.screenType = .category
-                    return
-                }
-         
-                if self?.applianceModel?.status.isEmpty ?? true {
-                    self?.screenType = .status
-                    return
-                }
-                
-                if self?.applianceModel?.status == StatusType.accepted.rawValue {
-                    if response?.subStatus == SubStatusType.repair.rawValue {
-                        self?.isShowRepairCompleted.toggle()
-                        return
-                    }
-                    if response?.subStatus == SubStatusType.testing.rawValue {
-                        self?.isShowTesting.toggle()
-                        return
-                    }
-                }
-                
-                if response?.cleaningRequired == true {
-                    self?.isShowCleaningCompleted.toggle()
-                    return
-                }
-                
-                self?.isShowInfo = true
-            }, onFailure: { [weak self] error in
-                self?.isError = true
-                if let error = error as? APIErrorResponse {
-                    self?.errorStr = error.message
-                } else  {
-                    self?.errorStr = error.localizedDescription
-                }
-            })
-            .disposed(by: disposeBag)
+        if self.applianceModel?.category.isEmpty ?? true {
+            self.screenType = .category
+            return
+        }
+ 
+        if self.applianceModel?.status.isEmpty ?? true {
+            self.screenType = .status
+            return
+        }
+        
+        if self.applianceModel?.status == StatusType.accepted.rawValue {
+            if applianceModel?.subStatus == SubStatusType.repair.rawValue {
+                self.isShowRepairCompleted.toggle()
+                return
+            }
+            if applianceModel?.subStatus == SubStatusType.testing.rawValue {
+                self.isShowTesting.toggle()
+                return
+            }
+        }
+        
+        if applianceModel?.cleaningRequired == true {
+            self.isShowCleaningCompleted.toggle()
+            return
+        }
+        
+        self.isShowInfo = true
     }
     
     func updateCategoryAppliance(code: String) {
@@ -126,6 +113,8 @@ class HomeViewModel: ObservableObject {
         case .rejected:
             if applianceModel?.category == CategoryType.refrigerant.rawValue {
                 self.params["recycle"] = true
+            } else {
+                self.params["scrap"] = true
             }
             patchAppliance(isNeedBack: true)
         case .accepted:

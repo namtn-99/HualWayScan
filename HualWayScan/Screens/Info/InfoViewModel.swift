@@ -34,13 +34,14 @@ class InfoViewModel: ObservableObject {
             "category": selectedCategory.rawValue,
             "status": selectedStatus.rawValue,
             "sub_status": selectedSubStatus.rawValue,
-            "parts": parts,
-            "po": po,
-            "description": description,
-            "cost": Int(cost) ?? 0,
+            "repair_parts": parts,
+            "repair_po": po,
+            "repair_description": description,
+            "repair_cost": Int(cost) ?? 0,
             "repair_required": repairRequired,
             "clean_required": cleanRequired,
             "recycle": recycle,
+            "scrap": scrap
         ]
         reposiroty.patchApplication(params)
             .subscribe(onSuccess: { [weak self] response in

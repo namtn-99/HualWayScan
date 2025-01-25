@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @Environment(\.presentationMode) var presentationMode
     @Binding var isShow: Bool
+    @Binding var model: ApplianceModel?
     @StateObject private var viewModel = HomeViewModel()
     
     let barCode: String
@@ -132,6 +133,7 @@ struct HomeView: View {
         }
         .onAppear {
             viewModel.barCode = barCode
+            viewModel.applianceModel = model
             viewModel.getAppliance(code: barCode)
         }
     }
@@ -221,8 +223,4 @@ extension HomeView {
             return false
         }
     }
-}
-
-#Preview {
-    HomeView(isShow: .constant(true), barCode: "")
 }

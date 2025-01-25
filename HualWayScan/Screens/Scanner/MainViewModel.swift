@@ -62,6 +62,11 @@ class MainViewModel: ObservableObject {
                     }
                 }
                 
+                if response?.cleaningRequired == true {
+                    self?.isShowUpdateView = true
+                    return
+                }
+                
                 self?.isShowInfoView = true
             }, onFailure: { [weak self] error in
                 self?.isError = true

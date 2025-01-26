@@ -28,6 +28,7 @@ struct ContentView: View {
                         print(error.localizedDescription)
                     }
                 }
+                .ignoresSafeArea(.all)
                 VStack {
                     Spacer()
                     Button {
@@ -78,7 +79,6 @@ struct ContentView: View {
 //        }, secondaryButtonTap: {
 //            NotificationCenter.default.post(name: NSNotification.rescan, object: nil, userInfo: nil)
 //        })
-        .ignoresSafeArea(.all)
     }
 }
 

@@ -28,58 +28,25 @@ struct InputRepairView: View {
             Spacer()
             updateButton
         }
-        .padding(.top)
+        .padding()
     }
 }
 
 extension InputRepairView {
     private var enterPartsView: some View {
-        VStack(spacing: 4) {
-            Text("Repair parts")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .bold()
-            TextField("Enter parts", text: $parts)
-                .textFieldStyle(CustomTextFieldStyle())
-                .autocapitalization(.none)
-        }
-        .padding(.horizontal)
+        CustomInputWithTitle(text: $parts, title: "Repair parts", placeholder: "Enter repair parts")
     }
     
     private var enterPOView: some View {
-        VStack(spacing: 4) {
-            Text("Repair PO")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .bold()
-            TextField("Enter po", text: $po)
-                .textFieldStyle(CustomTextFieldStyle())
-                .autocapitalization(.none)
-        }
-        .padding(.horizontal)
+        CustomInputWithTitle(text: $po, title: "Repair po", placeholder: "Enter repair po")
     }
     
     private var enterDescriptionView: some View {
-        VStack(spacing: 4) {
-            Text("Repair Description")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .bold()
-            TextField("Enter description", text: $description)
-                .textFieldStyle(CustomTextFieldStyle())
-                .autocapitalization(.none)
-        }
-        .padding(.horizontal)
+        CustomInputWithTitle(text: $description, title: "Repair Description", placeholder: "Enter repair description")
     }
     
     private var enterCostView: some View {
-        VStack(spacing: 4) {
-            Text("Repair Cost")
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .bold()
-            TextField("Enter cost", text: $cost)
-                .textFieldStyle(CustomTextFieldStyle())
-                .autocapitalization(.none)
-                .keyboardType(.numberPad)
-        }
-        .padding(.horizontal)
+        CustomInputWithTitle(text: $cost, title: "Repair Cost", placeholder: "Enter repair cost", keyboardType: .numberPad)
     }
     
     private var updateButton: some View {
@@ -97,11 +64,10 @@ extension InputRepairView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .frame(height: 50)
-                .background(isDisable() ? .gray.opacity(0.3) : .blue)
+                .background(isDisable() ? .gray.opacity(0.3) : AppConstant.primaryColor)
                 .cornerRadius(8)
         }
         .disabled(isDisable())
-        .padding()
     }
     
     func isDisable() -> Bool {
@@ -128,5 +94,36 @@ struct CustomTextFieldStyle: TextFieldStyle {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(colorScheme == .dark ? Color(.systemGray6) : Color(.systemGray5))
             )
+    }
+}
+
+struct CustomInputViewExample: View {
+    @State private var username: String = ""
+    
+    @State private var selectedOption: String? = nil
+       let options = ["Option 1", "Option 2", "Option 3", "Option 4"]
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            CustomPickerView(title: "Options", options: options, selectedOption: $selectedOption)
+            
+            CustomInputWithTitle(
+                text: $username, title: "Username",
+                placeholder: "Enter your username",
+                keyboardType: .emailAddress
+            )
+            
+            Button(action: {
+                print("Username: \(username)")
+            }) {
+                Text("Submit")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(AppConstant.primaryColor)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
+        }
+        .padding()
     }
 }

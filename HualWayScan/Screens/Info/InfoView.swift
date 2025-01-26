@@ -22,19 +22,22 @@ struct InfoView: View {
                 headerView
                 Spacer()
                 ScrollView(showsIndicators: false) {
-                    categoryView
-                    statusView
-                    substatusView
-                    partsView
-                    poView
-                    descriptionView
-                    costView
-                    repairRequiredView
-                    cleaningView
-                    recycleView
-                    scrapView
+                    VStack(spacing: 16) {
+                        categoryView
+                        statusView
+                        substatusView
+                        partsView
+                        poView
+                        descriptionView
+                        costView
+                        repairRequiredView
+                        cleaningView
+                        recycleView
+                        scrapView
+                        
+                        Spacer()
+                    }
                     
-                    Spacer()
                 }
                 .padding(.horizontal)
                 updateButton
@@ -58,6 +61,7 @@ struct InfoView: View {
         .errorAlert(isPresented: $viewModel.isError, errorMessage: viewModel.errorStr ?? "")
         .background(.white)
         .navigationBarHidden(true)
+        .edgesIgnoringSafeArea(.bottom)
         .onAppear {
             viewModel.selectedCategory = CategoryType(rawValue: model?.category ?? "") ?? .cooking
             viewModel.selectedSubStatus = SubStatusType(rawValue: model?.subStatus ?? "") ?? .condition
@@ -96,150 +100,52 @@ extension InfoView {
     }
     
     private var categoryView: some View {
-        HStack {
-            Text("Category")
-                .bold()
-                .foregroundStyle(.white)
-            Spacer()
-            Picker(selection: $viewModel.selectedCategory, label: Text("Select Category")) {
-                ForEach(CategoryType.allCases) { item in
-                    Text(item.rawValue)
-                }
-            }
-            .tint(.white)
-            .pickerStyle(.menu)
-        }
-        .frame(height: heightForView)
-        .padding()
-        .background(Color._00_A_9_E_0)
-        .cornerRadius(8)
+        CustomPickerView(title: "Category", options: CategoryType.allCases, selectedOption: $viewModel.selectedCategory)
     }
     
     private var statusView: some View {
-        HStack {
-            Text("Status")
-                .bold()
-                .foregroundStyle(.white)
-            Spacer()
-            Picker(selection: $viewModel.selectedStatus, label: Text("Select Status")) {
-                ForEach(StatusType.allCases) { item in
-                    Text(item.rawValue)
-                }
-            }
-            .tint(.white)
-            .pickerStyle(.menu)
+        CustomPickerView(title: "Status", options: StatusType.allCases, selectedOption: $viewModel.selectedStatus)
             .onChange(of: viewModel.selectedStatus) { newValue in
-                if newValue == .rejected {
-                    viewModel.selectedSubStatus = .expensive
-                } else {
-                    viewModel.selectedSubStatus = .testing
-                }
-              
+                viewModel.selectedSubStatus = nil
             }
-        }
-        .frame(height: heightForView)
-        .padding()
-        .background(Color._00_A_9_E_0)
-        .cornerRadius(8)
     }
     
     private var substatusView: some View {
-        HStack {
-            Text("Sub Status")
-                .bold()
-                .foregroundStyle(.white)
-            Spacer()
-            Picker(selection: $viewModel.selectedSubStatus, label: Text("Select Sub Status")) {
-                ForEach(viewModel.selectedStatus == .accepted ? SubStatusType.accepted : SubStatusType.rejected) { item in
-                    Text(item.rawValue)
-                }
-            }
-            .tint(.white)
-            .pickerStyle(.menu)
+        if viewModel.selectedStatus == .rejected {
+            CustomPickerView(title: "Sub-status", options: SubStatusType.rejected, selectedOption: $viewModel.selectedSubStatus)
+        } else {
+            CustomPickerView(title: "Sub-status", options: SubStatusType.accepted, selectedOption: $viewModel.selectedSubStatus)
         }
-        .frame(height: heightForView)
-        .padding()
-        .background(Color._00_A_9_E_0)
-        .cornerRadius(8)
     }
     
     private var partsView: some View {
-        HStack {
-            Text("Repair parts")
-                .bold()
-                .foregroundStyle(.white)
-            Spacer()
-            TextField("Enter repair parts", text: $viewModel.parts)
-                .multilineTextAlignment(.trailing)
-                .foregroundStyle(.white)
-        }
-        .frame(height: heightForView)
-        .padding()
-        .background(Color._00_A_9_E_0)
-        .cornerRadius(8)
+        CustomInputWithTitle(text: $viewModel.parts, title: "Repair parts", placeholder: "Enter repair parts")
     }
     
     private var poView: some View {
-        HStack {
-            Text("Repair po")
-                .bold()
-                .foregroundStyle(.white)
-            Spacer()
-            TextField("Enter repair po", text: $viewModel.po)
-                .multilineTextAlignment(.trailing)
-                .foregroundStyle(.white)
-        }
-        .frame(height: heightForView)
-        .padding()
-        .background(Color._00_A_9_E_0)
-        .cornerRadius(8)
+        CustomInputWithTitle(text: $viewModel.po, title: "Repair po", placeholder: "Enter repair po")
     }
     
     private var descriptionView: some View {
-        HStack {
-            Text("Repair description")
-                .bold()
-                .foregroundStyle(.white)
-            Spacer()
-            TextField("Enter repair description", text: $viewModel.description)
-                .multilineTextAlignment(.trailing)
-                .foregroundStyle(.white)
-        }
-        .frame(height: heightForView)
-        .padding()
-        .background(Color._00_A_9_E_0)
-        .cornerRadius(8)
+        CustomInputWithTitle(text: $viewModel.description, title: "Repair description", placeholder: "Enter repair description")
     }
     
     private var costView: some View {
-        HStack {
-            Text("Repair cost")
-                .bold()
-                .foregroundStyle(.white)
-            Spacer()
-            TextField("Enter repair cost", text: $viewModel.cost)
-                .multilineTextAlignment(.trailing)
-                .keyboardType(.numberPad)
-                .foregroundStyle(.white)
-        }
-        .frame(height: heightForView)
-        .padding()
-        .background(Color._00_A_9_E_0)
-        .cornerRadius(8)
+        CustomInputWithTitle(text: $viewModel.cost, title: "Repair cost", placeholder: "Enter repair cost")
     }
     
     private var repairRequiredView: some View {
         HStack {
             Text("Repair required")
                 .bold()
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
             Spacer()
             Toggle("", isOn: $viewModel.repairRequired)
                 .foregroundStyle(.white)
         }
-        .frame(height: heightForView)
+        .frame(height: 30)
         .padding()
-        .background(Color._00_A_9_E_0)
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(8)
     }
     
@@ -247,14 +153,14 @@ extension InfoView {
         HStack {
             Text("Cleaning required")
                 .bold()
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
             Spacer()
             Toggle("", isOn: $viewModel.cleanRequired)
                 .foregroundStyle(.white)
         }
-        .frame(height: heightForView)
+        .frame(height: 30)
         .padding()
-        .background(Color._00_A_9_E_0)
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(8)
     }
     
@@ -262,14 +168,14 @@ extension InfoView {
         HStack {
             Text("Recycle")
                 .bold()
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
             Spacer()
             Toggle("", isOn: $viewModel.recycle)
                 .foregroundStyle(.white)
         }
-        .frame(height: heightForView)
+        .frame(height: 30)
         .padding()
-        .background(Color._00_A_9_E_0)
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(8)
     }
     
@@ -277,14 +183,14 @@ extension InfoView {
         HStack {
             Text("Scrap")
                 .bold()
-                .foregroundStyle(.white)
+                .foregroundStyle(.black)
             Spacer()
             Toggle("", isOn: $viewModel.scrap)
                 .foregroundStyle(.white)
         }
-        .frame(height: heightForView)
+        .frame(height: 30)
         .padding()
-        .background(Color._00_A_9_E_0)
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(8)
     }
     

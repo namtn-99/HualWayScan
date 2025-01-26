@@ -206,7 +206,7 @@ extension HomeView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .frame(height: 50)
-                .background(isEnable() ? .blue : .gray.opacity(0.3))
+                .background(isEnable() ? AppConstant.primaryColor : .gray.opacity(0.3))
                 .cornerRadius(8)
         }
         .disabled(!isEnable())

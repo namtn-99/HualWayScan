@@ -6,6 +6,12 @@
 //
 
 import Foundation
+import SwiftUI
+
+enum AppConstant {
+    static let primaryColor = Color(hex: "#EF426F")
+    static let secondaryColor = Color(hex: "#00A9E0")
+}
 
 enum CategoryType: String, CaseIterable, Identifiable {
     var id: Self { self }

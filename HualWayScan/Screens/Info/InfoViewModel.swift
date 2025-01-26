@@ -15,9 +15,9 @@ class InfoViewModel: ObservableObject {
     @Published var errorStr: String?
     @Published var applianceModel: ApplianceModel?
     
-    @Published var selectedCategory: CategoryType = .cooking
-    @Published var selectedStatus: StatusType = .accepted
-    @Published var selectedSubStatus: SubStatusType = .condition
+    @Published var selectedCategory: CategoryType?
+    @Published var selectedStatus: StatusType?
+    @Published var selectedSubStatus: SubStatusType?
     @Published var parts = ""
     @Published var po = ""
     @Published var description = ""
@@ -31,9 +31,9 @@ class InfoViewModel: ObservableObject {
     func patchAppliance(barcode: String) {
         let params: [String: Any] = [
             "barcode": barcode,
-            "category": selectedCategory.rawValue,
-            "status": selectedStatus.rawValue,
-            "sub_status": selectedSubStatus.rawValue,
+            "category": selectedCategory?.rawValue ?? "",
+            "status": selectedStatus?.rawValue ?? "",
+            "sub_status": selectedSubStatus?.rawValue ?? "",
             "repair_parts": parts,
             "repair_po": po,
             "repair_description": description,

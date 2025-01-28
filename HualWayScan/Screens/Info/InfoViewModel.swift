@@ -39,7 +39,7 @@ class InfoViewModel: ObservableObject {
             "repair_description": description,
             "repair_cost": Int(cost) ?? 0,
             "repair_required": repairRequired,
-            "clean_required": cleanRequired,
+            "cleaning_required": cleanRequired,
             "recycle": recycle,
             "scrap": scrap
         ]

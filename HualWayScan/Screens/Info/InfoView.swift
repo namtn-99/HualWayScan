@@ -16,6 +16,8 @@ struct InfoView: View {
     
     @Binding var model: ApplianceModel?
     
+    @State var isFirstTime = true
+    
     var body: some View {
         ZStack {
             VStack {
@@ -106,6 +108,10 @@ extension InfoView {
     private var statusView: some View {
         CustomPickerView(title: "Status", options: StatusType.allCases, selectedOption: $viewModel.selectedStatus)
             .onChange(of: viewModel.selectedStatus) { newValue in
+                if isFirstTime {
+                    isFirstTime.toggle()
+                    return
+                }
                 viewModel.selectedSubStatus = nil
             }
     }

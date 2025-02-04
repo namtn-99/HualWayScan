@@ -64,7 +64,7 @@ enum APIRouter {
     }
     
     var header: [String: String] {
-        let header = ["Content-Type": "application/json; charset=utf-8",
+        let header = [
                       "accept": "application/json"]
 //        if needAuthorization,
 //            let accessToken = KeychainStorage.shared.accessToken {

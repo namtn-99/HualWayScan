@@ -28,6 +28,7 @@ struct InfoView: View {
                         categoryView
                         statusView
                         substatusView
+                        structIdView
                         partsView
                         poView
                         descriptionView
@@ -76,6 +77,7 @@ struct InfoView: View {
             viewModel.cleanRequired = model?.cleaningRequired ?? false
             viewModel.recycle = model?.recycle ?? false
             viewModel.scrap = model?.scrap ?? false
+            viewModel.truckId = model?.truckId ?? ""
             
             if let cost = model?.repairCost {
                 viewModel.cost = String(describing: cost)
@@ -122,6 +124,10 @@ extension InfoView {
         } else {
             CustomPickerView(title: "Sub-status", options: SubStatusType.accepted, selectedOption: $viewModel.selectedSubStatus)
         }
+    }
+    
+    private var structIdView: some View {
+        CustomInputWithTitle(text: $viewModel.truckId, title: "Truck ID", placeholder: "Enter truck ID", keyboardType: .numberPad)
     }
     
     private var partsView: some View {

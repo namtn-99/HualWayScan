@@ -29,6 +29,7 @@ struct ContentView: View {
                     }
                 }
                 .ignoresSafeArea(.all)
+                
                 VStack {
                     Spacer()
                     Button {
@@ -42,8 +43,24 @@ struct ContentView: View {
                 if viewModel.isSuccess {
                     GeometryReader { _ in
                         SuccessPopupView(message: "Added!", onTap: {
-                            viewModel.isSuccess.toggle()
+                            viewModel.isSuccess = false
                             NotificationCenter.default.post(name: NSNotification.rescan, object: nil, userInfo: nil)
+                        })
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .padding(.horizontal, 16)
+                    }
+                    .background(
+                        Color.black.opacity(0.65)
+                            .edgesIgnoringSafeArea(.all)
+                            
+                    )
+                }
+                
+                if viewModel.isAdded {
+                    GeometryReader { _ in
+                        InputPopupView(message: "What is the truck number?", onTap: { id in
+                            viewModel.isAdded = false
+                            viewModel.updateTruckId(code: barCode, truckId: id)
                         })
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .padding(.horizontal, 16)
@@ -62,23 +79,12 @@ struct ContentView: View {
                 InfoView(isShow: $viewModel.isShowInfoView, model: $viewModel.applianceModel)
             }
         }
-//        .showAlert(isPresented: $isShowContinueUpdate, errorMessage: "Do you want to continue updating?", primaryTitle: "Continue", secondaryTitle: "Cancel", primaryButtonTap: {
-//            barCode = AppSettings.barcode
-//            isShowHome.toggle()
-//        }, secondaryButtonTap: {
-//            AppSettings.barcode = ""
-//        })
-        .onChange(of: viewModel.isError) { newValue in
+        .onChange(of: viewModel.isExist) { newValue in
             if newValue {
-                viewModel.isError = false
+                viewModel.isExist = false
                 viewModel.getAppliance(code: barCode)
             }
         }
-//        .showAlert(isPresented: $viewModel.isError, errorMessage: viewModel.errorStr ?? "", primaryTitle: "Update", secondaryTitle: "Cancel", primaryButtonTap: {
-//            viewModel.getAppliance(code: barCode)
-//        }, secondaryButtonTap: {
-//            NotificationCenter.default.post(name: NSNotification.rescan, object: nil, userInfo: nil)
-//        })
     }
 }
 

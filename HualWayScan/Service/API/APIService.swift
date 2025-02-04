@@ -59,14 +59,6 @@ extension APIService {
                                               _: CheckingType,
                                               _ singleEvent: @escaping (SingleEvent<T>) -> Void)
     {
-//        if response.response?.statusCode == 403 {
-//            if let vc = UIApplication.keyWindow()?.rootViewController?.topMostViewController() {
-//                vc.showCommonError(content: "Phiên hết hạn. Quý khách vui lòng đăng nhập lại") {
-//                    Utils.logOut()
-//                    return
-//                }
-//            }
-//        }
         
         let responseDic = response.data?.convertToDictionary()
         let code = responseDic?["code"] as? String

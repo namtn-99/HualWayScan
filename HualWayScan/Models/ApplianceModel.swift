@@ -22,6 +22,7 @@ struct ApplianceModel: Codable, Hashable {
     var cleaningRequired: Bool
     var recycle: Bool
     var scrap: Bool
+    var truckId: String
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -38,5 +39,6 @@ struct ApplianceModel: Codable, Hashable {
         case cleaningRequired = "cleaning_required"
         case recycle
         case scrap
+        case truckId = "truck_id"
     }
 }

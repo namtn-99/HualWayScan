@@ -22,6 +22,7 @@ class InfoViewModel: ObservableObject {
     @Published var po = ""
     @Published var description = ""
     @Published var cost = ""
+    @Published var truckId = ""
     @Published var repairRequired = false
     @Published var cleanRequired = false
     @Published var recycle = false
@@ -41,7 +42,8 @@ class InfoViewModel: ObservableObject {
             "repair_required": repairRequired,
             "cleaning_required": cleanRequired,
             "recycle": recycle,
-            "scrap": scrap
+            "scrap": scrap,
+            "truck_id": truckId
         ]
         reposiroty.patchApplication(params)
             .subscribe(onSuccess: { [weak self] response in

@@ -24,7 +24,6 @@ struct InputPopupView: View {
                 .padding(.bottom, 8)
             HStack {
                 TextField("Enter truck id", text: $text)
-                    .keyboardType(.numberPad)
                     .focused($isFocus)
                    
                 if !text.isEmpty {

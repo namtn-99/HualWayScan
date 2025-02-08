@@ -16,10 +16,12 @@ enum AppConstant {
 enum CategoryType: String, CaseIterable, Identifiable {
     var id: Self { self }
     
-    case refrigerant = "refrigerant"
-    case cooking = "cooking"
-    case laundry = "laundry"
-    case other = "other"
+    case refrigerant = "Refrigerant"
+    case cooking = "Cooking"
+    case washer = "Washer"
+    case dryer = "Dryer"
+    case dishwasher = "Dishwasher"
+    case other = "Other"
 }
 
 enum StatusType: String, CaseIterable, Identifiable {

@@ -127,7 +127,7 @@ extension InfoView {
     }
     
     private var structIdView: some View {
-        CustomInputWithTitle(text: $viewModel.truckId, title: "Truck ID", placeholder: "Enter truck ID", keyboardType: .numberPad)
+        CustomInputWithTitle(text: $viewModel.truckId, title: "Truck ID", placeholder: "Enter truck ID")
     }
     
     private var partsView: some View {

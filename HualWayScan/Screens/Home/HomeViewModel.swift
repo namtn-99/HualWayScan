@@ -179,6 +179,7 @@ class HomeViewModel: ObservableObject {
         
         if isRequired {
             params["repair_required"] = true
+            params["sub_status"] = SubStatusType.repair.rawValue
             isShowRepairInput.toggle()
         } else {
             params["status"] = StatusType.rejected.rawValue
